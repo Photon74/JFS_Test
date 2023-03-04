@@ -2,7 +2,7 @@
 {
     public interface IRepository
     {
-        BalanceRoot GetCalculations();
+        BalanceRoot GetBalances();
         IEnumerable<Payment> GetPayments();
     }
 }

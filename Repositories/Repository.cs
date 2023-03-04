@@ -7,9 +7,10 @@ namespace JFS_Test.Repositories
         private readonly string balanseJson = File.ReadAllText("TestData/balance_202105270825.json");
         private readonly string paymentJson = File.ReadAllText("TestData/payment_202105270827.json");
 
-        public BalanceRoot GetCalculations()
+        public BalanceRoot GetBalances()
         {
-            return JsonSerializer.Deserialize<BalanceRoot>(balanseJson);
+            var tmp = JsonSerializer.Deserialize<BalanceRoot>(balanseJson).Balances.ToList(); ;
+            return JsonSerializer.Deserialize<BalanceRoot>(balanseJson).Balances.ToList();
         }
 
         public IEnumerable<Payment> GetPayments()

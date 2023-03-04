@@ -1,4 +1,4 @@
-﻿namespace JFS_Test
+﻿namespace JFS_Test.Models
 {
     public class TurnoverStatement
     {

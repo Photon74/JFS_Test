@@ -23,8 +23,19 @@ namespace JFS_Test.Controllers
         [HttpGet]
         public List<Payment> GetBalances()
         {
-            //var res = JsonSerializer.Deserialize<BalanceRoot>(balanseJson);
-            return JsonSerializer.Deserialize<List<Payment>>(paymentJson);
+            var res = JsonSerializer.Deserialize<BalanceRoot>(balanseJson);
+            var b = res.Balances.ToList();
+            foreach (var item in b)
+            {
+                var r = item;
+            }
+
+            var paymentList = JsonSerializer.Deserialize<List<Payment>>(paymentJson);
+            foreach (var item in paymentList)
+            {
+                var c = item;
+            }
+            return paymentList;
             //return _repository.GetCalculations();
         }
     }
