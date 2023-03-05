@@ -1,4 +1,6 @@
-﻿namespace JFS_Test.Models
+﻿using System.Text.Json.Serialization;
+
+namespace JFS_Test.Models
 {
     public class Balance
     {
@@ -20,5 +22,4 @@
         [JsonPropertyName("balance")]
         public List<Balance> Balances { get; set; }
     }
-
 }

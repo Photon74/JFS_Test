@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+﻿using JFS_Test.DTOModels;
+using JFS_Test.DTOModels.Enums;
+using JFS_Test.Repositories;
+using JFS_Test.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace JFS_Test.Controllers
 {
@@ -9,34 +10,23 @@ namespace JFS_Test.Controllers
     [ApiController]
     public class BalancesController : ControllerBase
     {
-        private readonly string balanseJson = System.IO.File.ReadAllText("TestData/balance_202105270825.json");
-        private readonly string paymentJson = System.IO.File.ReadAllText("TestData/payment_202105270827.json");
 
-        //private readonly IRepository _repository;
+        private readonly IStatementService _service;
+        private readonly IRepository _repository;
+        private readonly IPaymentService _paymentService;
 
-        //public BalancesController(IRepository repository)
-        //{
-        //    _repository = repository;
-        //}
-
-        // GET: api/<BalancesController>
-        [HttpGet]
-        public List<Payment> GetBalances()
+        public BalancesController(IStatementService service, IRepository repository, IPaymentService paymentService)
         {
-            var res = JsonSerializer.Deserialize<BalanceRoot>(balanseJson);
-            var b = res.Balances.ToList();
-            foreach (var item in b)
-            {
-                var r = item;
-            }
+            _service = service;
+            _repository = repository;
+            _paymentService = paymentService;
+        }
 
-            var paymentList = JsonSerializer.Deserialize<List<Payment>>(paymentJson);
-            foreach (var item in paymentList)
-            {
-                var c = item;
-            }
-            return paymentList;
-            //return _repository.GetCalculations();
+        [HttpGet("/GetBalances")]
+        public IEnumerable<StatementDto> GetBalances(int accountId, Period period)
+        {
+            var result = _service.GetStatements(accountId, period);
+            return result.Reverse();
         }
     }
 }
