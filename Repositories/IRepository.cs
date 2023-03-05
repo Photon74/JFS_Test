@@ -1,8 +1,10 @@
-﻿namespace JFS_Test.Repositories
+﻿using JFS_Test.Models;
+
+namespace JFS_Test.Repositories
 {
     public interface IRepository
     {
-        BalanceRoot GetBalances();
+        IEnumerable<Balance> GetBalances();
         IEnumerable<Payment> GetPayments();
     }
 }

@@ -1,5 +1,8 @@
+using AutoMapper;
+using JFS_Test.Mapper;
 using JFS_Test.Repositories;
 using JFS_Test.Services;
+using JFS_Test.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace JFS_Test
@@ -11,20 +14,24 @@ namespace JFS_Test
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddSingleton<IRepository, Repository>();
+            builder.Services.AddScoped<IStatementService, StatementService>();
+            builder.Services.AddScoped<IPaymentService, PaymentService>();
 
-            builder.Services.AddControllers(opt =>
+            var mapper = new MapperConfiguration(m =>
+                m.AddProfile(new MapperProfile())).CreateMapper();
+            builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
+
+            builder.Services.AddControllers(options =>
             {
-                opt.OutputFormatters.Add(new CsvOutputFormatter());
-                opt.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+                options.OutputFormatters.Add(new CsvSerializerOutputFormatter());
+                options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
             });
 
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

@@ -5,9 +5,9 @@ using System.Text;
 
 namespace JFS_Test.Services
 {
-    public class CsvOutputFormatter : TextOutputFormatter
+    public class CsvSerializerOutputFormatter : TextOutputFormatter
     {
-        public CsvOutputFormatter()
+        public CsvSerializerOutputFormatter()
         {
             SupportedMediaTypes.Add(MediaTypeHeaderValue.Parse("text/csv"));
             SupportedEncodings.Add(Encoding.UTF8);
