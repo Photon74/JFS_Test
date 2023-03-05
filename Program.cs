@@ -1,4 +1,3 @@
-using AutoMapper;
 using JFS_Test.Mapper;
 using JFS_Test.Repositories;
 using JFS_Test.Services;
@@ -16,9 +15,9 @@ namespace JFS_Test
             builder.Services.AddSingleton<IRepository, Repository>();
             builder.Services.AddScoped<IStatementService, StatementService>();
             builder.Services.AddScoped<IPaymentService, PaymentService>();
+            builder.Services.AddScoped<IBalanceService, BalanceService>();
+            builder.Services.AddScoped<IStatementBuilder, StatementBuilder>();
 
-            var mapper = new MapperConfiguration(m =>
-                m.AddProfile(new MapperProfile())).CreateMapper();
             builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
             builder.Services.AddControllers(options =>

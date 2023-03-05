@@ -22,5 +22,4 @@ namespace JFS_Test.Models
         [JsonPropertyName("balance")]
         public List<Balance> Balances { get; set; }
     }
-
 }

@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace JFS_Test.DTOModels
+﻿namespace JFS_Test.DTOModels
 {
     public class BalanceDto
     {

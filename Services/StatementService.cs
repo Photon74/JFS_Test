@@ -1,32 +1,56 @@
 ﻿using JFS_Test.DTOModels;
-using JFS_Test.Repositories;
+using JFS_Test.DTOModels.Enums;
 using JFS_Test.Services.Interfaces;
 
 namespace JFS_Test.Services
 {
     public class StatementService : IStatementService
     {
-        private readonly IRepository _repository;
         private readonly IPaymentService _paymentService;
+        private readonly IBalanceService _balanceService;
+        private readonly IStatementBuilder _statementBuilder;
 
-        public StatementService(IRepository repository, IPaymentService paymentService)
+        public StatementService(IPaymentService paymentService, IBalanceService balanceService, IStatementBuilder statementBuilder)
         {
-            _repository = repository;
-            var balances = _repository.GetBalances();
             _paymentService = paymentService;
+            _balanceService = balanceService;
+            _statementBuilder = statementBuilder;
         }
 
-        public IEnumerable<TurnoverStatementDto> GetStatements(int accountId, Period period)
+        public IEnumerable<StatementDto> GetStatements(int accountId, Period period)
         {
+            var statements = new List<StatementDto>();
+            var balances = _balanceService.GetBalancesByAccountId(accountId);
 
-            return new List<TurnoverStatementDto>();
+            for (var i = 0; i < balances.Count(); i += (int)period)
+            {
+                var balancePeriod = balances.Skip(i).Take(((int)period)).ToList();
+                var statement = BuildStatementIn(balancePeriod);
+                statements.Add(statement);
+            }
+
+            return statements;
         }
 
-        public double PaymentSum(int accountId, Period period)
+        private StatementDto BuildStatementIn(List<BalanceDto> balancePeriod)
         {
-            var payments = _paymentService.GetPaymentDtoList();
-            var t = payments.Where(p => p.Date == DateTime.Now);
-            return 100;
+            var incomingBalance = balancePeriod.FirstOrDefault().InBalance;
+            var accruedForPeriod = _paymentService.GetSumForPeriod(
+                balancePeriod.FirstOrDefault().Period,
+                balancePeriod.LastOrDefault().Period);
+            var paidForPeriod = balancePeriod.Sum(b => b.Calculation);
+            var outgoingBalance = incomingBalance + paidForPeriod - accruedForPeriod;
+
+            var statement = _statementBuilder
+                .CreateStatement(balancePeriod)
+                .AddName()
+                .AddIncomingBalance(Math.Round(incomingBalance, 2))
+                .AddCalculation(Math.Round(accruedForPeriod, 2))
+                .AddPaidSum(Math.Round(paidForPeriod, 2))
+                .AddOutcomingBalance(Math.Round(outgoingBalance, 2))
+                .GetStatement();
+
+            return statement;
         }
     }
 }

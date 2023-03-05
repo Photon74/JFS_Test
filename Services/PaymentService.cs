@@ -29,6 +29,7 @@ namespace JFS_Test.Services
                  .Where(p => p.Date.Year == monthPeriod.Year
                              && p.Date.Month == monthPeriod.Month)
                  .Sum(p => p.Sum);
+
             return sum;
         }
 
@@ -37,18 +38,31 @@ namespace JFS_Test.Services
             var sum = GetPaymentDtoList()
                 .Where(p => p.Date >= begin && p.Date <= end.AddMonths(1))
                 .Sum(p => p.Sum);
+
+            return sum;
+        }
+
+        public double GetSumMonth(DateTimeOffset month)
+        {
+            var sum = GetPaymentDtoList()
+                .Where(p => p.Date.Year > month.Year
+                && p.Date.Month == month.Month)
+                .Sum(p => p.Sum);
+
             return sum;
         }
 
         public IEnumerable<PaymentDto> GetPaymentDtoList()
         {
-            List<PaymentDto> paymentDtos = new List<PaymentDto>();
+            List<PaymentDto> paymentDtoList = new List<PaymentDto>();
             var payments = _repository.GetPayments();
+
             foreach (var payment in payments)
             {
-                paymentDtos.Add(_mapper.Map<PaymentDto>(payment));
+                paymentDtoList.Add(_mapper.Map<PaymentDto>(payment));
             }
-            return paymentDtos;
+
+            return paymentDtoList;
         }
     }
 }

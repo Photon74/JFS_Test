@@ -1,6 +1,6 @@
 ﻿namespace JFS_Test.DTOModels
 {
-    public class TurnoverStatementDto
+    public class StatementDto
     {
         public string PeriodName { get; set; }
         public double IncomingBalanceForPeriod { get; set; }
