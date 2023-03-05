@@ -37,8 +37,6 @@ namespace JFS_Test
 
             app.MapControllers();
 
-            //app.UseWelcomePage();
-
             app.Run();
         }
     }
