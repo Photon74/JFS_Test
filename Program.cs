@@ -1,8 +1,8 @@
-using JFS_Test.Mapper;
 using JFS_Test.Repositories;
 using JFS_Test.Services;
 using JFS_Test.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Text.Json.Serialization;
 
 namespace JFS_Test
 {
@@ -18,12 +18,14 @@ namespace JFS_Test
             builder.Services.AddScoped<IBalanceService, BalanceService>();
             builder.Services.AddScoped<IStatementBuilder, StatementBuilder>();
 
-            builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
-
             builder.Services.AddControllers(options =>
             {
                 options.OutputFormatters.Add(new CsvSerializerOutputFormatter());
                 options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
+            })
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
             builder.Services.AddEndpointsApiExplorer();

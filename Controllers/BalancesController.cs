@@ -26,7 +26,7 @@ namespace JFS_Test.Controllers
         public IEnumerable<StatementDto> GetBalances(int accountId, Period period)
         {
             var result = _service.GetStatements(accountId, period);
-            return result;
+            return result.Reverse();
         }
     }
 }

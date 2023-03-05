@@ -24,28 +24,28 @@ namespace JFS_Test.Services
 
             for (var i = 0; i < balances.Count(); i += (int)period)
             {
-                var balancePeriod = balances.Skip(i).Take(((int)period)).ToList();
-                var statement = BuildStatementIn(balancePeriod);
+                var balanceDtos = balances.Skip(i).Take(((int)period)).ToList();
+                var statement = BuildStatementIn(balanceDtos, period);
                 statements.Add(statement);
             }
 
             return statements;
         }
 
-        private StatementDto BuildStatementIn(List<BalanceDto> balancePeriod)
+        private StatementDto BuildStatementIn(List<BalanceDto> balanceDtos, Period period)
         {
-            var incomingBalance = balancePeriod.FirstOrDefault().InBalance;
-            var accruedForPeriod = _paymentService.GetSumForPeriod(
-                balancePeriod.FirstOrDefault().Period,
-                balancePeriod.LastOrDefault().Period);
-            var paidForPeriod = balancePeriod.Sum(b => b.Calculation);
-            var outgoingBalance = incomingBalance + paidForPeriod - accruedForPeriod;
+            var incomingBalance = balanceDtos.FirstOrDefault().InBalance;
+            var calculatedForPeriod = balanceDtos.Sum(s => s.Calculation);
+            var paidForPeriod = _paymentService.GetSumForPeriod(
+                balanceDtos.FirstOrDefault().Period,
+                balanceDtos.LastOrDefault().Period);
+            var outgoingBalance = incomingBalance - calculatedForPeriod + paidForPeriod;
 
             var statement = _statementBuilder
-                .CreateStatement(balancePeriod)
-                .AddName()
+                .CreateStatement(balanceDtos)
+                .AddName(period)
                 .AddIncomingBalance(Math.Round(incomingBalance, 2))
-                .AddCalculation(Math.Round(accruedForPeriod, 2))
+                .AddCalculation(Math.Round(calculatedForPeriod, 2))
                 .AddPaidSum(Math.Round(paidForPeriod, 2))
                 .AddOutcomingBalance(Math.Round(outgoingBalance, 2))
                 .GetStatement();

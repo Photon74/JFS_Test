@@ -1,12 +1,10 @@
-﻿using System.Text.Json.Serialization;
-
-namespace JFS_Test.DTOModels
+﻿namespace JFS_Test.DTOModels
 {
     public class PaymentDto
     {
         public int AccountId { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateTimeOffset Date { get; set; }
 
         public double Sum { get; set; }
 

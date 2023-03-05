@@ -1,5 +1,7 @@
 ﻿using JFS_Test.DTOModels;
+using JFS_Test.DTOModels.Enums;
 using JFS_Test.Services.Interfaces;
+using System.Text;
 
 namespace JFS_Test.Services
 {
@@ -22,10 +24,23 @@ namespace JFS_Test.Services
             return this;
         }
 
-        public StatementBuilder AddName()
+        public StatementBuilder AddName(Period period)
         {
-            _statement.PeriodName = _balances.First().Period.ToString("MM - ")
-                + _balances.Last().Period.ToString("MM/yyyy");
+            StringBuilder sb = new StringBuilder();
+            if (period == Period.Month)
+            {
+                sb.Append("Отчет за месяц: ");
+            }
+            else if (period == Period.Quarter)
+            {
+                sb.Append("Отчет за квартал: ");
+            }
+            else sb.Append("Отчет за год: ");
+
+            sb.Append(_balances.FirstOrDefault().Period.ToString("MM - ")
+                + _balances.LastOrDefault().Period.ToString("MM.yyyy"));
+
+            _statement.PeriodName = sb.ToString();
 
             return this;
         }
@@ -39,7 +54,7 @@ namespace JFS_Test.Services
 
         public StatementBuilder AddCalculation(double calculation)
         {
-            _statement.AccruedForPeriod = calculation;
+            _statement.CalculatedForPeriod = calculation;
 
             return this;
         }

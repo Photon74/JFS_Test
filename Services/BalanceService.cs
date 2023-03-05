@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using JFS_Test.DTOModels;
+﻿using JFS_Test.DTOModels;
 using JFS_Test.Repositories;
 using JFS_Test.Services.Interfaces;
 
@@ -9,13 +8,11 @@ namespace JFS_Test.Services
     {
         private readonly IRepository _repository;
         private readonly IPaymentService _paymentService;
-        private readonly IMapper _mapper;
 
-        public BalanceService(IRepository repository, IPaymentService paymentService, IMapper mapper)
+        public BalanceService(IRepository repository, IPaymentService paymentService)
         {
             _repository = repository;
             _paymentService = paymentService;
-            _mapper = mapper;
         }
 
         public IEnumerable<BalanceDto> GetBalancesByAccountId(int accountId)

@@ -1,4 +1,5 @@
 ﻿using JFS_Test.DTOModels;
+using JFS_Test.DTOModels.Enums;
 
 namespace JFS_Test.Services.Interfaces
 {
@@ -6,7 +7,7 @@ namespace JFS_Test.Services.Interfaces
     {
         public StatementBuilder CreateStatement(IEnumerable<BalanceDto> balances);
 
-        public StatementBuilder AddName();
+        public StatementBuilder AddName(Period period);
 
         public StatementBuilder AddIncomingBalance(double inBalance);
 
