@@ -23,10 +23,12 @@ namespace JFS_Test.Controllers
         }
 
         [HttpGet("/GetBalances")]
-        public IEnumerable<StatementDto> GetBalances(int accountId, Period period)
-        {
-            var result = _service.GetStatements(accountId, period);
-            return result.Reverse();
-        }
+        //public IEnumerable<StatementDto> GetBalances(int accountId, Period period)
+        //{
+        //    var result = _service.GetStatements(accountId, period);
+        //    return result.Reverse();
+        //}
+        public IEnumerable<StatementDto> GetBalances(int accountId, Period period) =>
+            _service.GetStatements(accountId, period).Reverse();
     }
 }
